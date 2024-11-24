@@ -8,21 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .ignoresSafeArea()
+    @State private var isLoading = true // Tracks whether the loading screen is displayed
 
-                NavigationLink(destination: AssistantView()) {
-                    Text("Tap")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(width: 100, height: 100) // Set width and height equal
-                        .background(Color.blue)
-                        .clipShape(Circle()) // Makes the shape circular
-                }
+    var body: some View {
+        Group {
+            if isLoading {
+                LoadingScreen() // Displays the loading screen
+            } else {
+                HomeView()
             }
+        }
+        .onAppear {
+            simulateLoading()
+        }
+    }
+
+    // Simulate a loading delay
+    private func simulateLoading() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { // Adjust the delay as needed
+            isLoading = false
         }
     }
 }

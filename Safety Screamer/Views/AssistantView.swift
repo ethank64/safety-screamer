@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct AssistantView: View {
-    @Environment(\.presentationMode) var presentationMode // Allows dismissing the view
+    @Environment(\.scenePhase) var scenePhase // Observe the app's lifecycle
+    @Environment(\.presentationMode) var presentationMode
     @State private var emoji: String = "😐" // Default emoji
+    @State private var audioPlayer: AVAudioPlayer?
 
     var body: some View {
         ZStack {
@@ -41,8 +44,46 @@ struct AssistantView: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true) // Hides the default back arrow
-        .navigationBarHidden(true)          // Completely hides the navigation bar
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
+        .onChange(of: scenePhase) { oldValue, newValue in
+            // Handle changes between scene phases
+            switch newValue {
+            case .background:
+                print("App moved to the background.")
+                handleAppBackgrounding()
+            case .active:
+                print("App became active.")
+            case .inactive:
+                print("App became inactive.")
+            default:
+                break
+            }
+        }
+        .onAppear {
+            setupAudio()
+        }
+    }
+
+    // Set up the audio player
+    private func setupAudio() {
+        guard let path = Bundle.main.path(forResource: "momGuilt", ofType: "mp3") else {
+            print("Audio file not found")
+            return
+        }
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.prepareToPlay()
+        } catch {
+            print("Failed to initialize audio player: \(error.localizedDescription)")
+        }
+    }
+
+    // Handle app backgrounding
+    private func handleAppBackgrounding() {
+        audioPlayer?.play() // Play the audio file when the app goes to the background
     }
 }
 
