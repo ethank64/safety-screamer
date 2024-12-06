@@ -14,13 +14,14 @@ struct HomeView: View {
                 Color.white
                     .ignoresSafeArea()
 
-                NavigationLink(destination: AssistantView()) {
-                    Text("Start Drive")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(width: 100, height: 100) // Set width and height equal
-                        .background(Color.blue)
-                        .clipShape(Circle()) // Makes the shape circular
+                VStack {
+                    DashboardHeader()
+
+                    Spacer() // Push the rest of the content down
+
+                    StartDriveButton()
+                    
+                    Spacer()
                 }
             }
         }
@@ -30,3 +31,4 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
+

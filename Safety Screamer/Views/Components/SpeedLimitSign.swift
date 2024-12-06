@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SpeedLimitView: View {
+struct SpeedLimitSign: View {
     @AppStorage("usingMetric") private var usingMetric = false
     
     var speedLimit: Int = 25
@@ -35,5 +35,5 @@ struct SpeedLimitView: View {
 }
 
 #Preview {
-    SpeedLimitView()
+    SpeedLimitSign()
 }

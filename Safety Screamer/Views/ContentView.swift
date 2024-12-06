@@ -5,10 +5,11 @@
 //  Created by Ethan Knotts on 11/23/24.
 //
 
+// The main view
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isLoading = true // Tracks whether the loading screen is displayed
+    @State private var isLoading = false // Tracks whether the loading screen is displayed
 
     var body: some View {
         Group {

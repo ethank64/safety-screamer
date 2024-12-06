@@ -8,7 +8,7 @@
 import SwiftUI
 import AVFoundation
 
-struct AssistantView: View {
+struct DrivingView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(\.presentationMode) var presentationMode
     @State private var audioPlayer: AVAudioPlayer?
@@ -46,5 +46,5 @@ struct AssistantView: View {
 }
 
 #Preview {
-    AssistantView()
+    DrivingView()
 }
