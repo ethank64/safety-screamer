@@ -13,9 +13,9 @@ struct StartDriveButton: View {
             Text("Start Drive")
                 .font(.headline)
                 .foregroundColor(.white)
-                .frame(width: 100, height: 100) // Set width and height equal
+                .frame(width: 200, height: 60) // Rectangle dimensions
                 .background(Color.blue)
-                .clipShape(Circle()) // Makes the shape circular
+                .cornerRadius(15)
         }
     }
 }

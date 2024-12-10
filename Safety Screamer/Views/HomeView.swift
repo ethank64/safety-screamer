@@ -11,13 +11,15 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                // Background
                 Color.white
                     .ignoresSafeArea()
 
+                // Main content
                 VStack {
-                    DashboardHeader()
-
-                    Spacer() // Push the rest of the content down
+                    DashboardHeader(size: 45)
+                    
+                    SafetyStreak()
 
                     StartDriveButton()
                     

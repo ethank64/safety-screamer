@@ -25,7 +25,7 @@ struct SettingsView: View {
             
             SettingRow(title: "Enable Notifications", isOn: $notificationsOn)
             SettingRow(title: "Dark Mode", isOn: $darkModeOn)
-            SettingRow(title: "Use Metric System", isOn: $usingMetric) // Now uses @AppStorage
+            SettingRow(title: "Use Metric System", isOn: $usingMetric)
             
             Spacer()
         }
