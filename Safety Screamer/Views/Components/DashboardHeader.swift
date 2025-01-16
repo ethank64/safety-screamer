@@ -29,7 +29,7 @@ struct DashboardHeader: View {
             .padding()
             
             Divider()
-                .background(Color.black)
+                .background(Color.primary)
                 
         }
     }

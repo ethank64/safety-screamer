@@ -12,6 +12,9 @@ struct DrivingView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(\.presentationMode) var presentationMode
     @State private var audioPlayer: AVAudioPlayer?
+    
+    private var locationManager = LocationManager.shared
+    @StateObject private var speedManager = SpeedManager()
 
     var body: some View {
         ZStack {
@@ -23,6 +26,9 @@ struct DrivingView: View {
 
                 // Speed Limit
                 SpeedLimitSign()
+                
+                // Current speed
+                Text("Current Speed: \(speedManager.speed, specifier: "%.2f")")
 
                 Spacer()
 
@@ -39,6 +45,10 @@ struct DrivingView: View {
                         .padding(.horizontal, 20)
                 }
             }
+            .onAppear {
+                locationManager.requestPermission()
+            }
+            
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)

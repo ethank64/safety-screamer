@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  Main.swift
 //  Safety Screamer
 //
 //  Created by Ethan Knotts on 11/23/24.
@@ -8,15 +8,19 @@
 // The main view
 import SwiftUI
 
-struct ContentView: View {
-    @State private var isLoading = false // Tracks whether the loading screen is displayed
+struct Main: View {
+    @State private var isLoading = true // Tracks whether the loading screen is displayed
+    @AppStorage("darkModeOn") private var darkModeOn = false
+    @StateObject private var speedLimitManager = SpeedLimitManager()
 
     var body: some View {
         Group {
             if isLoading {
                 LoadingScreen() // Displays the loading screen
+                    .preferredColorScheme(darkModeOn ? .dark : .light)
             } else {
                 HomeView()
+                    .preferredColorScheme(darkModeOn ? .dark : .light)
             }
         }
         .onAppear {
@@ -33,5 +37,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    Main()
 }

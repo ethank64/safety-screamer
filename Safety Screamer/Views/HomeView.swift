@@ -12,7 +12,7 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 // Background
-                Color.white
+                Color(.systemBackground)
                     .ignoresSafeArea()
 
                 // Main content

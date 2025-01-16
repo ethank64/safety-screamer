@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("usingMetric") private var usingMetric = false // Persistent storage
-    
-    @State private var notificationsOn = true
-    @State private var darkModeOn = false
+    // Persistent storage
+    @AppStorage("usingMetric") private var usingMetric = false
+    @AppStorage("darkModeOn") private var darkModeOn = false
+    @AppStorage("notificationsOn") private var notificationsOn = true
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,7 +21,9 @@ struct SettingsView: View {
                 .padding(.bottom, 8)
             
             Divider()
+                .background(.primary)
                 .padding(.bottom, 8)
+                
             
             SettingRow(title: "Enable Notifications", isOn: $notificationsOn)
             SettingRow(title: "Dark Mode", isOn: $darkModeOn)
@@ -30,6 +32,7 @@ struct SettingsView: View {
             Spacer()
         }
         .padding()
+        .preferredColorScheme(darkModeOn ? .dark : .light) // Apply dynamic color scheme
     }
 }
 
