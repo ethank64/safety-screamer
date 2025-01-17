@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 12/9/24.
 //
+//  Description:
+//  A component that displays how many safe drives in a row the user has
+//  done.
+//
 
 import SwiftUI
 

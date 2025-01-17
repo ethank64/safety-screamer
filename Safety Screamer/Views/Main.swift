@@ -4,8 +4,11 @@
 //
 //  Created by Ethan Knotts on 11/23/24.
 //
+//  Description:
+//  Displays the Loading view and then switches to the Home view, which
+//  is the real meat of the app.
+//
 
-// The main view
 import SwiftUI
 
 struct Main: View {

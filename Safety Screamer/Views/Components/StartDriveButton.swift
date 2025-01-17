@@ -4,6 +4,9 @@
 //
 //  Created by Ethan Knotts on 12/5/24.
 //
+//  Description:
+//  The button on the Home view that starts the drive.
+//
 
 import SwiftUI
 

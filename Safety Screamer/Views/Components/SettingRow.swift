@@ -4,6 +4,9 @@
 //
 //  Created by Ethan Knotts on 12/5/24.
 //
+//  Description:
+//  Defines how a toggle item in the settings menu should look.
+//
 
 import SwiftUI
 

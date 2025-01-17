@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 12/4/24.
 //
+//  Description:
+//  This view displays a speed limit sign that updates dynamically
+//  based on the user's location.
+//
 
 import SwiftUI
 import CoreLocation
@@ -11,29 +15,33 @@ import CoreLocation
 struct SpeedLimitSign: View {
     @AppStorage("usingMetric") private var usingMetric = false
     @StateObject private var speedLimitManager = SpeedLimitManager()
+    
+    // Set to true if you want to test the speed limit API
+    private var debugging = false
 
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(Color.white)
+                .fill(Color(.systemBackground))
                 .frame(width: 225, height: 300)
                 .cornerRadius(8)
                 .overlay(       // Border
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.black, lineWidth: 2)
+                        .stroke(Color.primary, lineWidth: 2)
                 )
             VStack {
-                Text("\(speedLimitManager.speedLimit ?? 0)") // Display speed limit or fallback to 0
+                // Display speed limit or fallback to 0
+                Text("\(speedLimitManager.speedLimit ?? 0)")
                     .font(.system(size: 100, weight: .bold, design: .default)) // Large font size
-                    .foregroundColor(.black)
-                Text(usingMetric ? (speedLimitManager.speedLimitUnit == "K" ? "KPH" : "MPH") : "MPH") // Use unit from manager
+                Text(usingMetric ? (speedLimitManager.speedLimitUnit == "K" ? "KPH" : "MPH") : "MPH")
                     .font(.system(size: 30, weight: .medium, design: .default))
             }
         }
         .onAppear {
-            // Optionally fetch speed limit for a default location (for testing or initial load)
-            let sampleCoordinate = CLLocationCoordinate2D(latitude: 41.8781, longitude: -87.6298)
-            speedLimitManager.fetchSpeedLimit(for: sampleCoordinate)
+            if (debugging) {
+                let sampleCoordinate = CLLocationCoordinate2D(latitude: 41.8781, longitude: -87.6298)
+                speedLimitManager.fetchSpeedLimit(for: sampleCoordinate)
+            }
         }
     }
 }

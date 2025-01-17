@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 11/23/24.
 //
+//  Description:
+//  The main view that is displayed once the app loads. Accesses
+//  drive mode, settings, and previous drives.
+//
 
 import SwiftUI
 

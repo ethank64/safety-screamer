@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 11/23/24.
 //
+//  Description:
+//  The view when a drive is active. Users can see the
+//  current speed limit, their speed, and exit drive mode.
+//
 
 import SwiftUI
 import AVFoundation
@@ -12,13 +16,14 @@ struct DrivingView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(\.presentationMode) var presentationMode
     @State private var audioPlayer: AVAudioPlayer?
+    @AppStorage("darkModeOn") private var darkModeOn = false
     
     private var locationManager = LocationManager.shared
     @StateObject private var speedManager = SpeedManager()
 
     var body: some View {
         ZStack {
-            Color.white
+            Color(.systemBackground)
                 .ignoresSafeArea()
 
             VStack {

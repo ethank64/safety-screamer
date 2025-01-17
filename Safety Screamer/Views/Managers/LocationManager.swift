@@ -4,6 +4,11 @@
 //
 //  Created by Ethan Knotts on 1/16/25.
 //
+//  Description:
+//  Uses the CoreLocation library to get the user's location
+//  data in real time. Includes a static singleton instance
+//  used by the other managers and to ask for permission.
+//
 
 import CoreLocation
 import Foundation

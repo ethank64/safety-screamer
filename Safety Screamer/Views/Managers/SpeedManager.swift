@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 1/16/25.
 //
+//  Description:
+//  Holds onto the current speed of the user and updates it automatically
+//  based on changes in their location.
+//
 
 import CoreLocation
 import SwiftUI

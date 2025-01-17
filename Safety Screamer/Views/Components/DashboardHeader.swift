@@ -4,6 +4,9 @@
 //
 //  Created by Ethan Knotts on 12/5/24.
 //
+//  Description:
+//  The header at the top of the Home view that contains the settings button.
+//
 
 import SwiftUI
 

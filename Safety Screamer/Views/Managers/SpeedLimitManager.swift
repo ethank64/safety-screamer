@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 1/16/25.
 //
+//  Description:
+//  Uses the HERE speed limit API to convert user coordinates into
+//  the speed limit of the road that their on.
+//
 
 import CoreLocation
 import SwiftUI
@@ -13,8 +17,6 @@ class SpeedLimitManager: NSObject, ObservableObject {
 
     @Published var speedLimit: Int? // Speed limit in the area (in the unit provided by API)
     @Published var speedLimitUnit: String? // Unit of the speed limit (e.g., M for mph, K for km/h)
-    
-    
 
     override init() {
         super.init()

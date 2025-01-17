@@ -4,6 +4,10 @@
 //
 //  Created by Ethan Knotts on 12/5/24.
 //
+//  Description:
+//  Displays the various settings the user can manipulate
+//  while interacting with the app.
+//
 
 import SwiftUI
 

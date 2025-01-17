@@ -4,6 +4,9 @@
 //
 //  Created by Ethan Knotts on 11/23/24.
 //
+//  Description:
+//  The view that displays when the app is launched and is loading.
+//
 
 import SwiftUI
 
