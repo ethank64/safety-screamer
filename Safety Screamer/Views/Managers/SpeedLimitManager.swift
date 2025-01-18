@@ -6,7 +6,8 @@
 //
 //  Description:
 //  Uses the HERE speed limit API to convert user coordinates into
-//  the speed limit of the road that their on.
+//  the speed limit of the road that their on. Speed limit automatically
+//  gets updated in real time whenever the location changes.
 //
 
 import CoreLocation
@@ -26,6 +27,10 @@ class SpeedLimitManager: NSObject, ObservableObject {
         LocationManager.shared.addListener { [weak self] location in
             self?.fetchSpeedLimit(for: location.coordinate)
         }
+    }
+    
+    public func getSpeedLimit() -> Int {
+        return speedLimit ?? 0
     }
 
     public func fetchSpeedLimit(for coordinate: CLLocationCoordinate2D) {

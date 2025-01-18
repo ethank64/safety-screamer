@@ -28,7 +28,7 @@ struct SettingsView: View {
                 .background(.primary)
                 .padding(.bottom, 8)
                 
-            
+            // Settings
             SettingRow(title: "Enable Notifications", isOn: $notificationsOn)
             SettingRow(title: "Dark Mode", isOn: $darkModeOn)
             SettingRow(title: "Use Metric System", isOn: $usingMetric)

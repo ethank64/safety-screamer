@@ -14,7 +14,6 @@ import SwiftUI
 struct Main: View {
     @State private var isLoading = true // Tracks whether the loading screen is displayed
     @AppStorage("darkModeOn") private var darkModeOn = false
-    @StateObject private var speedLimitManager = SpeedLimitManager()
 
     var body: some View {
         Group {

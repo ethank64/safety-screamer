@@ -12,7 +12,7 @@
 import SwiftUI
 
 struct SafetyStreak: View {
-    var streakCount: Int = 0
+    @AppStorage("safetyStreak") private var streakCount = 0
     
     var body: some View {
         HStack {

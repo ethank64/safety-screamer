@@ -6,7 +6,8 @@
 //
 //  Description:
 //  Holds onto the current speed of the user and updates it automatically
-//  based on changes in their location.
+//  based on changes in their location. Speed automatically updates in
+//  real time whenever the location changes.
 //
 
 import CoreLocation
@@ -20,5 +21,10 @@ class SpeedManager: NSObject, ObservableObject {
         LocationManager.shared.addListener { [weak self] location in
             self?.speed = max(location.speed, 0) // Update speed (speed < 0 means invalid)
         }
+    }
+    
+    // TODO: Convert to mph or kph depending on settings
+    public func getSpeed() -> Int {
+        return Int(speed)
     }
 }

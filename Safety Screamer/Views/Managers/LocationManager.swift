@@ -19,6 +19,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     // Instance of Core Location's class
     private let coreLocationManager = CLLocationManager()
     private var listeners: [(CLLocation) -> Void] = [] // Store multiple closures
+    private var isMonitoring: Bool = false
 
     public override init() {
         super.init()
@@ -35,10 +36,23 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func addListener(_ listener: @escaping (CLLocation) -> Void) {
         listeners.append(listener)
     }
+    
+    func startMonitoring() {
+        isMonitoring = true;
+    }
+    
+    func stopMonitoring() {
+        isMonitoring = false
+    }
 
     // Built in method that's part of the CLLocationManager
     // Automatically updates the listeners with the new location value
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !isMonitoring {
+            return
+        }
+        
+        print("Location updated")
         guard let location = locations.last else { return }
         for listener in listeners {
             listener(location)

@@ -48,11 +48,9 @@ struct LoadingScreen: View {
         }
     }
     
-    // Simulate a loading delay
     private func simulateLoading() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             isLoading = false
-            // Perform navigation or continue app logic
         }
     }
 }

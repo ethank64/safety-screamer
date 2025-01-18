@@ -10,16 +10,14 @@
 //
 
 import SwiftUI
-import AVFoundation
 
 struct DrivingView: View {
-    @Environment(\.scenePhase) var scenePhase
     @Environment(\.presentationMode) var presentationMode
-    @State private var audioPlayer: AVAudioPlayer?
-    @AppStorage("darkModeOn") private var darkModeOn = false
+    @AppStorage("safetyStreak") private var safetyStreak = 0
     
     private var locationManager = LocationManager.shared
     @StateObject private var speedManager = SpeedManager()
+    private var drivingMonitor = DrivingMonitor()
 
     var body: some View {
         ZStack {
@@ -37,8 +35,16 @@ struct DrivingView: View {
 
                 Spacer()
 
+                // Stop drive button
                 Button(action: {
+                    if (drivingMonitor.getSafetyStatus()) {
+                        safetyStreak += 1
+                    } else {
+                        safetyStreak = 0
+                    }
+                    
                     presentationMode.wrappedValue.dismiss()
+                    drivingMonitor.stopMonitoring()
                 }) {
                     Text("Stop Drive")
                         .font(.headline)
@@ -52,6 +58,7 @@ struct DrivingView: View {
             }
             .onAppear {
                 locationManager.requestPermission()
+                drivingMonitor.startMonitoring()
             }
             
         }
