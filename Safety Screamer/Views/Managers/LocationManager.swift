@@ -32,6 +32,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func requestPermission() {
         coreLocationManager.requestWhenInUseAuthorization()
     }
+    
+    func getCurrentCoordinates() -> CLLocationCoordinate2D? {
+        return coreLocationManager.location?.coordinate
+    }
 
     func addListener(_ listener: @escaping (CLLocation) -> Void) {
         listeners.append(listener)

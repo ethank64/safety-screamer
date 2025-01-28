@@ -17,7 +17,7 @@ struct SpeedLimitSign: View {
     @StateObject private var speedLimitManager = SpeedLimitManager()
     
     // Set to true if you want to test the speed limit API
-    private var debugging = false
+    private var debugging = true
 
     var body: some View {
         ZStack {
@@ -31,16 +31,23 @@ struct SpeedLimitSign: View {
                 )
             VStack {
                 // Display speed limit or fallback to 0
-                Text("\(speedLimitManager.speedLimit ?? 0)")
+                Text("\(speedLimitManager.getSpeedLimit())")
                     .font(.system(size: 100, weight: .bold, design: .default)) // Large font size
-                Text(usingMetric ? (speedLimitManager.speedLimitUnit == "K" ? "KPH" : "MPH") : "MPH")
+                Text(usingMetric ? "KPH" : "MPH")
                     .font(.system(size: 30, weight: .medium, design: .default))
             }
         }
         .onAppear {
             if (debugging) {
-                let sampleCoordinate = CLLocationCoordinate2D(latitude: 41.8781, longitude: -87.6298)
-                speedLimitManager.fetchSpeedLimit(for: sampleCoordinate)
+//                let sampleCoordinate = CLLocationCoordinate2D(latitude: 41.8781, longitude: -87.6298)
+                print("test?")
+                if let coordinates = LocationManager.shared.getCurrentCoordinates() {
+                    print("CLLocationCoordinate2D(latitude: \(coordinates.latitude), longitude: \(coordinates.longitude))");
+                    print(coordinates)
+                    speedLimitManager.fetchSpeedLimit(for: coordinates)
+                } else {
+                    print("Current coordinates are not available")
+                }
             }
         }
     }

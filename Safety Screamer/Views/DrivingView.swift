@@ -14,6 +14,7 @@ import SwiftUI
 struct DrivingView: View {
     @Environment(\.presentationMode) var presentationMode
     @AppStorage("safetyStreak") private var safetyStreak = 0
+    @AppStorage("usingMetric") private var usingMetric = false
     
     private var locationManager = LocationManager.shared
     @StateObject private var speedManager = SpeedManager()
@@ -31,7 +32,7 @@ struct DrivingView: View {
                 SpeedLimitSign()
                 
                 // Current speed
-                Text("Current Speed: \(speedManager.speed, specifier: "%.2f")")
+                Text("Current Speed: \(speedManager.speed, specifier: "%.1f") \(usingMetric ? "KPH" : "MPH")")
 
                 Spacer()
 

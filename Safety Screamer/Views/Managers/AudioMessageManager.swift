@@ -14,29 +14,36 @@ import AVFoundation
 class AudioMessageManager: NSObject {
     private var audioPlayer: AVAudioPlayer?
 
-    // Play an audio message by its filename
+    private let audioFileCounts: [String: Int] = [
+        "onPhone": 1,
+        "speeding": 0,
+        "encouraging": 0
+    ]
+
+    // Play an audio message by its event type
     func playAudioMessage(event drivingEvent: String) {
-        if (isPlaying()) {
-            print("Message already playing. Skipping call")
-            return
-        }
-        
-        let fileName = generateFileName(event: drivingEvent)
-        
-        // Get the path to the audio file in the Resources folder
-        guard let path = Bundle.main.path(forResource: fileName, ofType: nil) else {
-            print("Error: Audio file \(fileName) not found in Resources folder.")
+        if isPlaying() {
+            print("Message already playing. Skipping call.")
             return
         }
 
-        let url = URL(fileURLWithPath: path)
+        guard let fileName = generateFileName(for: drivingEvent) else {
+            print("Error: Invalid or missing audio file for event \(drivingEvent).")
+            return
+        }
 
         do {
-            // Initialize the audio player with the file's URL
+            // Construct the URL for the audio file
+            guard let url = Bundle.main.url(forResource: "0", withExtension: "mp3") else {
+                print("Error: Audio file \(fileName) not found in \(drivingEvent) folder.")
+                return
+            }
+
+            // Initialize and play the audio
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
-            print("Playing audio message: \(fileName)")
+            print("Playing audio message: \(fileName).mp3 in \(drivingEvent) folder.")
         } catch {
             print("Error: Unable to play audio file \(fileName). \(error.localizedDescription)")
         }
@@ -54,14 +61,15 @@ class AudioMessageManager: NSObject {
     func isPlaying() -> Bool {
         return audioPlayer?.isPlaying ?? false
     }
-    
-    /// Returns a random filename for whatever driving thing the user did right/wrong.
-    ///
-    /// - Parameters:
-    ///     - safetyEvent: Something the user did while driving ("speeding", "onPhone", etc)
-    private func generateFileName(event drivingEvent: String) -> String {
-        
-        
-        return ""
+
+    // Generate a random file name for the given driving event
+    private func generateFileName(for drivingEvent: String) -> String? {
+        guard let count = audioFileCounts[drivingEvent], count > 0 else {
+            print("Error: No audio files available for event \(drivingEvent).")
+            return nil
+        }
+
+        let randomNum = Int.random(in: 0..<count)
+        return "\(randomNum)"
     }
 }
