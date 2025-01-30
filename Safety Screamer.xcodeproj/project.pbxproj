@@ -29,9 +29,22 @@
 		B4C184C22CF29DA400EB8D3C /* Safety ScreamerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Safety ScreamerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B4C372CA2D4B17D700DFB720 /* Exceptions for "Safety Screamer" folder in "Safety Screamer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Safety-Screamer-Info.plist",
+			);
+			target = B4C184A72CF29DA300EB8D3C /* Safety Screamer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B4C184AA2CF29DA300EB8D3C /* Safety Screamer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B4C372CA2D4B17D700DFB720 /* Exceptions for "Safety Screamer" folder in "Safety Screamer" target */,
+			);
 			path = "Safety Screamer";
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,9 @@
 				DEVELOPMENT_TEAM = K5LK3LLK6R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Safety-Screamer-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Screamer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to calculate your speed.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -429,6 +445,9 @@
 				DEVELOPMENT_TEAM = K5LK3LLK6R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Safety-Screamer-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Screamer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to calculate your speed.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

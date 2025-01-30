@@ -1,13 +1,3 @@
-//
-//  AudioMessageManager.swift
-//  Safety Screamer
-//
-//  Created by Ethan Knotts on 1/17/25.
-//
-//  Description:
-//  Manages the playing of guilty or encouraging audio messages.
-//
-
 import Foundation
 import AVFoundation
 
@@ -20,13 +10,23 @@ class AudioMessageManager: NSObject {
         "encouraging": 4
     ]
     
-    func playSound() {
-        print("Playing audio...")
-        let url = Bundle.main.url(forResource: "0 2", withExtension: "mp3")
-        audioPlayer = try! AVAudioPlayer(contentsOf: url!)
-        audioPlayer!.play()
+    override init() {
+        super.init()
+        setupAudioSession()
     }
 
+    // Configure AVAudioSession for background playback
+    private func setupAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+            try audioSession.setActive(true)
+            print("Audio session activated successfully.")
+        } catch {
+            print("Failed to activate audio session: \(error.localizedDescription)")
+        }
+    }
+    
     // Play an audio message by its event type
     func playAudioMessage(event drivingEvent: String) {
         if isPlaying() {
@@ -34,22 +34,24 @@ class AudioMessageManager: NSObject {
             return
         }
 
+        // Ensure the audio session is set up before playing
+        setupAudioSession()
+
         guard let fileName = generateFileName(for: drivingEvent) else {
             print("Error: Invalid or missing audio file for event \(drivingEvent).")
             return
         }
 
         do {
-            // Construct the URL for the audio file
             guard let url = Bundle.main.url(forResource: fileName, withExtension: "mp3") else {
                 print("Error: Audio file \(fileName).mp3 not found.")
                 return
             }
 
-            // Initialize and play the audio
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
+            print("Playing: \(fileName)")
         } catch {
             print("Error: Unable to play audio file \(fileName). \(error.localizedDescription)")
         }

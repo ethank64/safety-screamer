@@ -43,6 +43,7 @@ class DrivingMonitor: ObservableObject {
     func stopMonitoring() {
         LocationManager.shared.stopMonitoring()
         phoneActivityManager.stopMonitoringAppState()
+        resetSafetyStatus()
         
         timer?.invalidate()
         timer = nil
@@ -74,14 +75,16 @@ class DrivingMonitor: ObservableObject {
         return isDrivingSafely
     }
 
+    // DOES NOT play audio.
     private func handleSafeDriving() {
         if !isDrivingSafely {
-            isDrivingSafely = true
             lastUnsafeEvent = nil
             print("Driving safely!")
-            
-            audioMessageManager.playAudioMessage(event: "encouraging")
         }
+    }
+    
+    public func resetSafetyStatus() {
+        isDrivingSafely = true
     }
 
     private func handleUnsafeDriving(event: String) {

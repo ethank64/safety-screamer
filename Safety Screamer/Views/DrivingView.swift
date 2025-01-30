@@ -19,6 +19,7 @@ struct DrivingView: View {
     private var locationManager = LocationManager.shared
     @StateObject private var speedManager = SpeedManager()
     private var drivingMonitor = DrivingMonitor()
+    private let audioMessageManager = AudioMessageManager()
 
     var body: some View {
         ZStack {
@@ -40,6 +41,9 @@ struct DrivingView: View {
                 Button(action: {
                     if (drivingMonitor.getSafetyStatus()) {
                         safetyStreak += 1
+                        
+                        // Play encouraging message
+                        audioMessageManager.playAudioMessage(event: "encouraging")
                     } else {
                         safetyStreak = 0
                     }
