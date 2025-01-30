@@ -35,6 +35,8 @@ class SpeedLimitManager: NSObject, ObservableObject {
 
     public func getSpeedLimit() -> Int {
         guard let speedLimit = speedLimit else { return 0 }
+        
+        // Return speed limit as the right unit
         return usingMetric ? convertToMetric(speedLimit, unit: speedLimitUnit) : convertToImperial(speedLimit, unit: speedLimitUnit)
     }
 

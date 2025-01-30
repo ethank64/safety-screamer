@@ -1,15 +1,3 @@
-//
-//  LocationManager.swift
-//  Safety Screamer
-//
-//  Created by Ethan Knotts on 1/16/25.
-//
-//  Description:
-//  Uses the CoreLocation library to get the user's location
-//  data in real time. Includes a static singleton instance
-//  used by the other managers and to ask for permission.
-//
-
 import CoreLocation
 import Foundation
 
@@ -20,6 +8,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private let coreLocationManager = CLLocationManager()
     private var listeners: [(CLLocation) -> Void] = [] // Store multiple closures
     private var isMonitoring: Bool = false
+    
+    private var lastLocation: CLLocation?
+    private var lastUpdateTime: Date = Date.distantPast
+    private let updateInterval: TimeInterval = 3 // Only update every 3 seconds
 
     public override init() {
         super.init()
@@ -42,25 +34,34 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func startMonitoring() {
-        isMonitoring = true;
+        isMonitoring = true
     }
     
     func stopMonitoring() {
         isMonitoring = false
     }
 
-    // Built in method that's part of the CLLocationManager
+    // Built-in method that's part of CLLocationManager
     // Automatically updates the listeners with the new location value
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !isMonitoring {
-            return
-        }
+        guard isMonitoring, let location = locations.last else { return }
         
-        print("Location updated")
-        guard let location = locations.last else { return }
-        for listener in listeners {
-            listener(location)
+        let now = Date()
+        if now.timeIntervalSince(lastUpdateTime) >= updateInterval && shouldUpdateLocation(newLocation: location) {
+            lastUpdateTime = now
+            lastLocation = location
+            
+            print("Location updated")
+            for listener in listeners {
+                listener(location)
+            }
         }
+    }
+    
+    private func shouldUpdateLocation(newLocation: CLLocation) -> Bool {
+        guard let lastLocation = lastLocation else { return true }
+        let distanceThreshold: CLLocationDistance = 10 // Only update if moved by 10 meters
+        return lastLocation.distance(from: newLocation) > distanceThreshold
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

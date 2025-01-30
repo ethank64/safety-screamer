@@ -22,19 +22,18 @@ class DrivingMonitor: ObservableObject {
     private let audioMessageManager = AudioMessageManager()
 
     private var timer: Timer?
+    private var lastUnsafeEvent: String?
 
     deinit {
         stopMonitoring()
     }
 
     func startMonitoring() {
-        // Start managers
-        // Setting this bool for LocationManager starts/stops speed/speed limit monitoring
         LocationManager.shared.startMonitoring()
         phoneActivityManager.monitorAppState()
         
-        // Always make sure each drive starts out as safe
         isDrivingSafely = true
+        lastUnsafeEvent = nil
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.evaluateDrivingSafety()
@@ -78,18 +77,20 @@ class DrivingMonitor: ObservableObject {
     private func handleSafeDriving() {
         if !isDrivingSafely {
             isDrivingSafely = true
+            lastUnsafeEvent = nil
             print("Driving safely!")
-            // Perform actions for safe driving (optional, e.g., encouragement messages)
+            
+            audioMessageManager.playAudioMessage(event: "encouraging")
         }
     }
 
     private func handleUnsafeDriving(event: String) {
-        if isDrivingSafely {
+        if lastUnsafeEvent != event {
             isDrivingSafely = false
+            lastUnsafeEvent = event
             print("Unsafe driving detected: \(event)")
-            // Play a guilt-inducing audio message
+            
             audioMessageManager.playAudioMessage(event: "\(event)")
-//            audioMessageManager.playSound()
         }
     }
 }
