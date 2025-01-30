@@ -89,6 +89,7 @@ class DrivingMonitor: ObservableObject {
             print("Unsafe driving detected: \(event)")
             // Play a guilt-inducing audio message
             audioMessageManager.playAudioMessage(event: "\(event)")
+//            audioMessageManager.playSound()
         }
     }
 }

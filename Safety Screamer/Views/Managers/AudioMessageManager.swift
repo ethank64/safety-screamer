@@ -15,10 +15,17 @@ class AudioMessageManager: NSObject {
     private var audioPlayer: AVAudioPlayer?
 
     private let audioFileCounts: [String: Int] = [
-        "onPhone": 1,
-        "speeding": 0,
-        "encouraging": 0
+        "onPhone": 5,
+        "speeding": 6,
+        "encouraging": 4
     ]
+    
+    func playSound() {
+        print("Playing audio...")
+        let url = Bundle.main.url(forResource: "0 2", withExtension: "mp3")
+        audioPlayer = try! AVAudioPlayer(contentsOf: url!)
+        audioPlayer!.play()
+    }
 
     // Play an audio message by its event type
     func playAudioMessage(event drivingEvent: String) {
@@ -34,8 +41,8 @@ class AudioMessageManager: NSObject {
 
         do {
             // Construct the URL for the audio file
-            guard let url = Bundle.main.url(forResource: "0", withExtension: "mp3") else {
-                print("Error: Audio file \(fileName) not found in \(drivingEvent) folder.")
+            guard let url = Bundle.main.url(forResource: fileName, withExtension: "mp3") else {
+                print("Error: Audio file \(fileName).mp3 not found.")
                 return
             }
 
@@ -43,7 +50,6 @@ class AudioMessageManager: NSObject {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
-            print("Playing audio message: \(fileName).mp3 in \(drivingEvent) folder.")
         } catch {
             print("Error: Unable to play audio file \(fileName). \(error.localizedDescription)")
         }
@@ -70,6 +76,6 @@ class AudioMessageManager: NSObject {
         }
 
         let randomNum = Int.random(in: 0..<count)
-        return "\(randomNum)"
+        return "\(drivingEvent)\(randomNum)"
     }
 }
