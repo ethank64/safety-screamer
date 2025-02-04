@@ -15,7 +15,7 @@ import SwiftUI
 
 class SpeedLimitManager: NSObject, ObservableObject {
     @AppStorage("usingMetric") private var usingMetric = false
-    private let apiKey = "CgMTXMFNH0T6MPtKm_MWnxM2D07qH36r4KoPwIVMwlE"
+    private let apiKey: String
 
     @Published var speedLimit: Int? // Speed limit in the area (in the unit provided by API)
     @Published var speedLimitUnit: String? // Unit of the speed limit (e.g., M for mph, K for km/h)
@@ -23,6 +23,7 @@ class SpeedLimitManager: NSObject, ObservableObject {
     let radius: Int = 500 // The radius that the API will check for speed limits (Meters)
 
     override init() {
+        self.apiKey = SpeedLimitManager.loadAPIKey() // Load API key from Secrets.plist
         super.init()
 
         // Update speed limit when location changes
@@ -48,7 +49,6 @@ class SpeedLimitManager: NSObject, ObservableObject {
     }
 
     private func convertToImperial(_ speed: Int, unit: String?) -> Int {
-        
         if unit == "K" { // Convert km/h to mph
             return Int(Double(speed) / 1.60934)
         }
@@ -102,5 +102,15 @@ class SpeedLimitManager: NSObject, ObservableObject {
             }
         }
         task.resume()
+    }
+    
+    // Get the API key from the Secrets file
+    private static func loadAPIKey() -> String {
+        guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let plist = NSDictionary(contentsOfFile: filePath) as? [String: Any],
+              let apiKey = plist["HERE_API_KEY"] as? String else {
+            fatalError("Unable to load HERE_API_KEY from Secrets.plist")
+        }
+        return apiKey
     }
 }

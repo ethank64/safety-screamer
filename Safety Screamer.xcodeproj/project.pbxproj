@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B4C3736E2D4C149F00DFB720 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C3736D2D4C149F00DFB720 /* Launch Screen.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B4C184B92CF29DA400EB8D3C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,24 +31,12 @@
 		B4C184A82CF29DA300EB8D3C /* Safety Screamer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Safety Screamer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4C184B82CF29DA400EB8D3C /* Safety ScreamerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Safety ScreamerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4C184C22CF29DA400EB8D3C /* Safety ScreamerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Safety ScreamerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4C3736D2D4C149F00DFB720 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B4C372CA2D4B17D700DFB720 /* Exceptions for "Safety Screamer" folder in "Safety Screamer" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Safety-Screamer-Info.plist",
-			);
-			target = B4C184A72CF29DA300EB8D3C /* Safety Screamer */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B4C184AA2CF29DA300EB8D3C /* Safety Screamer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B4C372CA2D4B17D700DFB720 /* Exceptions for "Safety Screamer" folder in "Safety Screamer" target */,
-			);
 			path = "Safety Screamer";
 			sourceTree = "<group>";
 		};
@@ -88,6 +80,7 @@
 		B4C1849F2CF29DA300EB8D3C = {
 			isa = PBXGroup;
 			children = (
+				B4C3736D2D4C149F00DFB720 /* Launch Screen.storyboard */,
 				B4C184AA2CF29DA300EB8D3C /* Safety Screamer */,
 				B4C184BB2CF29DA400EB8D3C /* Safety ScreamerTests */,
 				B4C184C52CF29DA400EB8D3C /* Safety ScreamerUITests */,
@@ -225,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4C3736E2D4C149F00DFB720 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

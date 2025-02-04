@@ -9,11 +9,10 @@ import SwiftUI
 
 struct PastDrivesTable: View {
     var body: some View {
-        VStack() { // Align all content in the VStack to the left
+        VStack() {
             Divider()
                 .background(Color.primary)
             
-            // Use HStack to left align text
             HStack {
                 Text("Past Drives")
                     .font(.system(size: 45, weight: .bold))
