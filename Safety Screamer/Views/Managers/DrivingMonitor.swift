@@ -2,15 +2,15 @@
 //  DrivingMonitor.swift
 //  Safety Screamer
 //
-//  Created by Ethan Knotts on 1/16/25.
+//  Created by Ethan Knotts on 2/11/25.
 //
 //  Description:
-//  Takes in phone usage data, speed data, and speed limit data and checks
-//  whether the user is driving safely. If not, it takes the necessary
-//  action.
+//  Subscribes to observables (notifications) from other manager classes and handles all of the driving events
+//  from them. Also invokes the AudioMessageManager.
 //
 
 import SwiftUI
+import BackgroundTasks
 
 class DrivingMonitor: ObservableObject {
     @Published var isDrivingSafely: Bool = true // Observable for UI updates
@@ -20,22 +20,44 @@ class DrivingMonitor: ObservableObject {
     private let speedLimitManager = SpeedLimitManager()
     private let phoneActivityManager = PhoneActivityManager()
     private let audioMessageManager = AudioMessageManager()
+    private let debugging = true
 
-    private var timer: Timer?
+    // We no longer use a Timer; instead, location updates trigger evaluations.
     private var lastUnsafeEvent: String?
+    
+    // Store the observer so you can remove it later if needed.
+    private var phoneActiveObserver: NSObjectProtocol?
 
     deinit {
         stopMonitoring()
+        if let observer = phoneActiveObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     func startMonitoring() {
+        // Start receiving location updates (configured for background updates)
         LocationManager.shared.startMonitoring()
+        // Start monitoring app state changes
         phoneActivityManager.monitorAppState()
+        
+        // Subscribe to the phone-did-become-active notification.
+        phoneActiveObserver = NotificationCenter.default.addObserver(
+            forName: .phoneDidBecomeActive,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            // Trigger the unsafe driving event when the phone becomes active.
+            self?.handleUnsafeDriving(event: "onPhone")
+        }
         
         isDrivingSafely = true
         lastUnsafeEvent = nil
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        registerBackgroundTask()
+        
+        // Use the location listener to trigger safety evaluations.
+        LocationManager.shared.addListener { [weak self] location in
             self?.evaluateDrivingSafety()
         }
     }
@@ -44,38 +66,43 @@ class DrivingMonitor: ObservableObject {
         LocationManager.shared.stopMonitoring()
         phoneActivityManager.stopMonitoringAppState()
         resetSafetyStatus()
-        
-        timer?.invalidate()
-        timer = nil
     }
 
     private func evaluateDrivingSafety() {
-        print("Evaluating...")
         let currentSpeed = speedManager.getSpeed()
         let speedLimit = speedLimitManager.getSpeedLimit()
         let isOnPhone = phoneActivityManager.getIsOnPhone()
-        print("User speed: \(currentSpeed)")
-        print("Speed limit: \(speedLimit)")
-        print("On phone: \(isOnPhone)")
-
-        if isSpeeding(currentSpeed: currentSpeed, speedLimit: speedLimit) {
-            handleUnsafeDriving(event: "speeding")
-        } else if isOnPhone {
-            handleUnsafeDriving(event: "onPhone")
+        
+        if debugging {
+            print("Evaluating driving safety...")
+            print("User speed: \(currentSpeed)")
+            print("Speed limit: \(speedLimit)")
+            print("Is on phone: \(isOnPhone)")
+        }
+        
+        // Evaluate safety only when the user is not actively using the phone.
+        if !isOnPhone {
+            if isSpeeding(currentSpeed: currentSpeed, speedLimit: speedLimit) {
+                handleUnsafeDriving(event: "speeding")
+            } else {
+                handleSafeDriving()
+            }
         } else {
-            handleSafeDriving()
+            // When the user is actively on the phone, skip evaluation.
+            print("User is actively using the phone. Skipping driving safety evaluation.")
         }
     }
 
     private func isSpeeding(currentSpeed: Int, speedLimit: Int) -> Bool {
-        return currentSpeed > speedLimit
+        // If speed limit is 0, just assume that there is none
+        return (currentSpeed > speedLimit) && speedLimit != 0
     }
     
     func getSafetyStatus() -> Bool {
         return isDrivingSafely
     }
 
-    // DOES NOT play audio.
+    // Called when driving is safe. (This method does not trigger an audio alert.)
     private func handleSafeDriving() {
         if !isDrivingSafely {
             lastUnsafeEvent = nil
@@ -87,13 +114,34 @@ class DrivingMonitor: ObservableObject {
         isDrivingSafely = true
     }
 
-    private func handleUnsafeDriving(event: String) {
+    public func handleUnsafeDriving(event: String) {
+        isDrivingSafely = false
+        
+        // Only trigger a new event if it differs from the previous one.
         if lastUnsafeEvent != event {
-            isDrivingSafely = false
             lastUnsafeEvent = event
             print("Unsafe driving detected: \(event)")
             
-            audioMessageManager.playAudioMessage(event: "\(event)")
+            // Play the corresponding audio message.
+            audioMessageManager.playAudioMessage(event: event)
         }
+    }
+
+    // Register a background task so the system can wake your app for location updates.
+    private func registerBackgroundTask() {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.yourapp.safetyscreamer", using: nil) { task in
+            self.handleBackgroundTask(task: task as! BGProcessingTask)
+        }
+    }
+
+    // Handle background execution. (BGTasks are scheduled at the system’s discretion.)
+    private func handleBackgroundTask(task: BGProcessingTask) {
+        task.expirationHandler = {
+            self.stopMonitoring()
+            task.setTaskCompleted(success: false)
+        }
+        
+        evaluateDrivingSafety()
+        task.setTaskCompleted(success: true)
     }
 }

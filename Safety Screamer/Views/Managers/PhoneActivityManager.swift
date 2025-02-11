@@ -1,58 +1,57 @@
 import SwiftUI
+import UIKit
+
+extension Notification.Name {
+    static let phoneDidBecomeActive = Notification.Name("phoneDidBecomeActive")
+}
 
 class PhoneActivityManager: ObservableObject {
-    @Published var isOnPhone: Bool = false // True if user is actively on the phone
-    
+    // When true, the user is actively using the phone (i.e. the app is active).
+    // When false, the user has gotten off the app.
+    @Published var isOnPhone: Bool = false
+
     public func getIsOnPhone() -> Bool {
         return isOnPhone
     }
 
-    // Monitor the app's state to determine if the user is "on the phone"
+    // Monitor the app's state to determine if the user is actively using the phone.
     func monitorAppState() {
+        // Called when the app becomes active (the user is on the phone).
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleAppOpened),
+            selector: #selector(handleAppDidBecomeActive),
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
-
+        
+        // Called when the app is about to resign active (the user gets off the app).
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleAppExited),
-            name: UIApplication.willEnterForegroundNotification,
+            selector: #selector(handleAppWillResignActive),
+            name: UIApplication.willResignActiveNotification,
             object: nil
         )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleAppBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
-    }
-
-    // Called when the app is opened or comes to the foreground
-    @objc private func handleAppOpened(_ notification: Notification) {
-        isOnPhone = false
-        print("User returned to the app (isOnPhone = false).")
-    }
-
-    // Called when the user actively exits the app (like pressing the home button)
-    @objc private func handleAppExited(_ notification: Notification) {
-        isOnPhone = true
-        print("User navigated to home screen or switched apps (isOnPhone = true).")
     }
     
-    // Called when the app enters the background (screen locked)
-    @objc private func handleAppBackground(_ notification: Notification) {
+    // Called when the app becomes active—indicating that the user is using the phone.
+    @objc private func handleAppDidBecomeActive(_ notification: Notification) {
         isOnPhone = true
-        print("User locked the screen or turned off the phone (isOnPhone = false).")
+        print("User is using the phone (app did become active, isOnPhone = true).")
     }
-
+    
+    // Called when the app is about to resign active—indicating that the user has gotten off the app.
+    @objc private func handleAppWillResignActive(_ notification: Notification) {
+        isOnPhone = false
+        print("User is no longer using the phone (app will resign active, isOnPhone = false).")
+        
+        // Post a notification so other parts of the app know the phone became active.
+        NotificationCenter.default.post(name: .phoneDidBecomeActive, object: nil)
+    }
+    
     func stopMonitoringAppState() {
         NotificationCenter.default.removeObserver(self)
     }
-
+    
     deinit {
         stopMonitoringAppState()
     }
